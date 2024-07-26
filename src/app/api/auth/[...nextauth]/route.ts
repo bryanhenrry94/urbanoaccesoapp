@@ -1,31 +1,94 @@
 // [...nextauth].js
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import bcrypt from "bcryptjs";
 
 const authHandler = NextAuth({
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     }),
   ],
+  secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/login", // Personaliza la página de inicio de sesión si es necesario
     error: "/error",
   },
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
-      console.log("user callback signin");
-      console.log(user);
+      try {
+        // Verificar si el usuario ya existe llamando a la API
+        const checkUserResponse = await fetch(
+          `${process.env.API_URL}/users/check/?email=${user.email}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
-      const isAllowedToSignIn = true;
-      if (isAllowedToSignIn) {
-        return true;
-      } else {
-        // Return false to display a default error message
-        return false;
-        // Or you can return a URL to redirect to:
-        // return '/unauthorized'
+        if (!checkUserResponse.ok) {
+          throw new Error("Error al verificar el usuario");
+        }
+
+        const { exists } = await checkUserResponse.json();
+
+        if (!exists) {
+          // Generar un hash de contraseña temporal
+          const tempPassword = Math.random().toString(36).slice(-8);
+          const tempPasswordHash = await bcrypt.hash(tempPassword, 10);
+
+          // Si el usuario no existe, lo registramos llamando a la API
+          const registerResponse = await fetch(
+            `${process.env.API_URL}/users/register`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                email: user.email,
+                name: user.name,
+                password_hash: tempPasswordHash,
+                image: user.image,
+              }),
+            }
+          );
+
+          if (!registerResponse.ok) {
+            throw new Error("Error al registrar el usuario");
+          }
+
+          const { createdUser } = await registerResponse.json();
+
+          // Asignar el rol 'user' por defecto
+          const assignRoleResponse = await fetch(
+            `${process.env.API_URL}/user_roles/assign`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                user_id: createdUser.id,
+                role_id: 1, // 1 = admin, 2 = user
+              }),
+            }
+          );
+
+          if (!assignRoleResponse.ok) {
+            throw new Error("Error al asignar el rol al usuario");
+          }
+
+          // TODO: Enviar un correo al usuario con instrucciones para cambiar su contraseña temporal
+        }
+
+        return true; // Permitir el inicio de sesión
+      } catch (error) {
+        console.error("Error en el proceso de autenticación:", error);
+        return false; // Denegar el inicio de sesión en caso de error
       }
     },
     async redirect({ url, baseUrl }) {
