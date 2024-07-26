@@ -6,10 +6,11 @@ import Label from "@/components/ui/Label";
 import Input from "@/components/ui/Input";
 import LoginButton from "@/components/ui/Button/Primary";
 import LoginGoogle from "@/components/ui/Button/Secondary";
+import Image from "next/image";
 import { signIn, useSession } from "next-auth/react";
-
 import { FaKey, FaGoogle } from "react-icons/fa";
 import { useRouter } from "next/navigation";
+import NavBar from "@/components/ui/Navbar";
 
 interface LoginForm {
   email: string;
@@ -26,7 +27,6 @@ const LoginPage: React.FC = () => {
   });
 
   useEffect(() => {
-    // Redirige a /dashboard si el usuario ya está autenticado
     if (status === "authenticated") {
       router.push("/dashboard");
     }
@@ -43,24 +43,16 @@ const LoginPage: React.FC = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    // Evitar loguear datos sensibles en producción
-    // if (process.env.NODE_ENV !== "production") {
-    //}
-
-    // Iniciar sesión automáticamente después del registro
     const signInResult = await signIn("credentials", {
       email: formData.email,
       password: formData.password,
       redirect: false,
     });
 
-    console.log("signInResult", signInResult);
-
     if (signInResult?.error) {
       console.error("Error signing in:", signInResult.error);
       alert("Credenciales inválidas. Por favor, intente de nuevo.");
     } else {
-      // Redirigir al dashboard después del inicio de sesión exitoso
       router.push("/dashboard");
     }
   };
@@ -73,34 +65,40 @@ const LoginPage: React.FC = () => {
     try {
       const result = await signIn("google", { redirect: false });
 
-      console.log("Resultado del inicio de sesión:", result);
-
       if (result === undefined) {
-        // El inicio de sesión podría estar procesándose en otra ventana/pestaña
         console.log("El inicio de sesión se está procesando en otra ventana");
       } else if (result.error) {
         console.error("Error durante el inicio de sesión:", result.error);
       } else {
-        // El inicio de sesión exitoso debería redirigir automáticamente
-        console.log("Inicio de sesión exitoso, redirigiendo...");
+        console.log("Inicio de sesión exitoso, redirigiendo...");        
       }
+
+      router.push("/dashboard");
     } catch (error) {
       console.error("Unexpected error during sign in:", error);
     }
   };
 
   return (
-    <div className="flex min-h-[100dvh] flex-col items-center justify-center px-4 py-12 sm:px-6 lg:px-6">
-      <div className="mx-auto w-full max-w-sm space-y-6">
-        <form onSubmit={handleSubmit}>
-          <div className="text-center">
-            <h1 className="text-3xl font-bold tracking-tight text-foreground">
+    <div className="min-h-screen bg-gray-100">
+      <NavBar />
+      <main className="container mx-auto px-4 py-8">
+        <div className="max-w-md mx-auto bg-white shadow-lg rounded-lg p-8">
+          <div className="flex flex-col items-center mb-6">
+            <Image
+              src="/UrbanoAcceso.svg"
+              alt="Logo"
+              width={80}
+              height={80}
+              className="mb-4"
+            />
+            <h1 className="text-3xl font-bold text-gray-800">
               Inicio de Sesión
             </h1>
           </div>
-          <div className="space-y-4">
-            <div className="grid gap-2">
-              <Label htmlFor="email">Usuario</Label>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <Label htmlFor="email" className="text-gray-700">Usuario</Label>
               <Input
                 id="email"
                 name="email"
@@ -110,10 +108,11 @@ const LoginPage: React.FC = () => {
                 placeholder="email@example.com"
                 required
                 aria-label="Email"
+                className="w-full mt-1"
               />
             </div>
-            <div className="grid gap-2">
-              <Label htmlFor="password">Contraseña</Label>
+            <div>
+              <Label htmlFor="password" className="text-gray-700">Contraseña</Label>
               <Input
                 id="password"
                 name="password"
@@ -123,34 +122,38 @@ const LoginPage: React.FC = () => {
                 placeholder="****"
                 required
                 aria-label="Contraseña"
+                className="w-full mt-1"
               />
             </div>
-            <LoginButton type="submit">
+            <LoginButton type="submit" className="w-full">
               <FaKey className="mr-2 h-4 w-4" />
               Ingresar
             </LoginButton>
+          </form>
+          <div className="my-6 flex items-center justify-between">
+            <hr className="w-full" />
+            <span className="px-2 text-gray-500">O</span>
+            <hr className="w-full" />
           </div>
-          <div className="flex items-center justify-center my-4">
-            <div className="border-t border-gray-300 flex-grow mr-3"></div>
-            <span className="text-gray-500">O</span>
-            <div className="border-t border-gray-300 flex-grow ml-3"></div>
-          </div>
-        </form>
-        <LoginGoogle className="w-full" onClick={handleLoginWithGoogle}>
-          <FaGoogle className="mr-2 h-4 w-4 " />
-          Ingresar con Google
-        </LoginGoogle>
-        <p className="mt-2 text-muted-foreground">
-          ¿No tienes una cuenta?
-          <Link
-            href="/register"
-            className="font-medium text-primary hover:underline"
-            prefetch={false}
-          >
-            &nbsp;Registrar
-          </Link>
-        </p>
-      </div>
+          <LoginGoogle className="w-full" onClick={handleLoginWithGoogle}>
+            <FaGoogle className="mr-2 h-4 w-4" />
+            Ingresar con Google
+          </LoginGoogle>
+          <p className="mt-6 text-center text-gray-600">
+            ¿No tienes una cuenta?{" "}
+            <Link
+              href="/register"
+              className="text-blue-600 hover:underline"
+              prefetch={false}
+            >
+              Registrar
+            </Link>
+          </p>
+        </div>
+      </main>
+      <footer className="bg-gray-800 text-white text-center py-4 mt-12">
+        <p>&copy; 2024 UrbanoAcceso. Todos los derechos reservados.</p>
+      </footer>
     </div>
   );
 };
