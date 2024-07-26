@@ -20,16 +20,12 @@ const LoginPage: React.FC = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  console.log(session);
-
   const [formData, setFormData] = useState<LoginForm>({
     email: "",
     password: "",
   });
 
   useEffect(() => {
-    console.log(status);
-
     // Redirige a /dashboard si el usuario ya está autenticado
     if (status === "authenticated") {
       router.push("/dashboard");
@@ -74,16 +70,23 @@ const LoginPage: React.FC = () => {
   const handleLoginWithGoogle = async (
     e: React.MouseEvent<HTMLButtonElement>
   ) => {
-    // Inicia sesión y redirige después de que el proceso de inicio de sesión esté completo
-    console.log('clic en login with google');
-    const result = await signIn("google", { redirect: false });
+    e.preventDefault();
 
-    if (result?.ok) {
-      // Aquí redirige a /dashboard solo si la autenticación es exitosa
-      router.push("/dashboard");
-    } else {
-      // Maneja el error si la autenticación falla
-      console.error("Error during sign in:", result?.error);
+    try {
+      const result = await signIn("google", { redirect: false });
+
+      console.log("Sign-in result:", result);
+
+      if (result && result.ok) {
+        router.push("/dashboard");
+      } else {
+        console.error(
+          "Error during sign in:",
+          result?.error || "Unknown error"
+        );
+      }
+    } catch (error) {
+      console.error("Unexpected error during sign in:", error);
     }
   };
 
@@ -134,10 +137,7 @@ const LoginPage: React.FC = () => {
             <div className="border-t border-gray-300 flex-grow ml-3"></div>
           </div>
         </form>
-        <LoginGoogle
-          className="w-full"
-          onClick={handleLoginWithGoogle}
-        >
+        <LoginGoogle className="w-full" onClick={handleLoginWithGoogle}>
           <FaGoogle className="mr-2 h-4 w-4 " />
           Ingresar con Google
         </LoginGoogle>
