@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { FaUserPlus } from "react-icons/fa";
 import NavBar from "@/components/ui/Navbar";
+import Image from "next/image";
 
 interface RegisterForm {
   email: string;
@@ -40,7 +41,7 @@ const RegisterPage: React.FC = () => {
     e.preventDefault();
 
     if (formData.password !== formData.confirm_password) {
-      alert("Passwords do not match");
+      alert("Las contraseñas no coinciden");
       return;
     }
 
@@ -60,9 +61,8 @@ const RegisterPage: React.FC = () => {
 
       if (res.ok) {
         const user = await res.json();
-        console.log("User registered:", user);
+        console.log("Usuario registrado:", user);
 
-        // Iniciar sesión automáticamente después del registro
         const signInResult = await signIn("credentials", {
           email: formData.email,
           password: formData.password,
@@ -70,105 +70,120 @@ const RegisterPage: React.FC = () => {
         });
 
         if (signInResult?.error) {
-          console.error("Error signing in:", signInResult.error);
+          console.error("Error al iniciar sesión:", signInResult.error);
           alert(
-            "Registration successful, but there was an error signing in. Please try logging in manually."
+            "Registro exitoso, pero hubo un error al iniciar sesión. Por favor, intente iniciar sesión manualmente."
           );
         } else {
-          //Redirigir al dashboard después del inicio de sesión exitoso
           router.push("/dashboard");
         }
       } else {
         const errorData = await res.json();
-        console.error("Registration failed:", errorData.error);
-        alert(`Registration failed: ${errorData.error}`);
+        console.error("Fallo en el registro:", errorData.error);
+        alert(`Fallo en el registro: ${errorData.error}`);
       }
     } catch (error) {
-      console.error("Error during registration:", error);
+      console.error("Error durante el registro:", error);
       alert(
-        "An unexpected error occurred during registration. Please try again."
+        "Ocurrió un error inesperado durante el registro. Por favor, intente nuevamente."
       );
     }
   };
 
   return (
-    <div>
+    <div className="min-h-screen bg-gray-100">
       <NavBar />
-      <div className="flex min-h-[100dvh] flex-col items-center justify-center px-4 py-12 sm:px-6 lg:px-6">
-        <div className="mx-auto w-full max-w-sm space-y-6">
-          <form onSubmit={handleSubmit}>
-            <div className="text-center">
-              <h1 className="text-3xl font-bold tracking-tight text-foreground">
-                Registro
-              </h1>
+      <main className="container mx-auto px-4 py-8">
+        <div className="max-w-md mx-auto bg-white shadow-lg rounded-lg p-8">
+          <div className="flex flex-col items-center mb-6">
+            <Image
+              src="/UrbanoAcceso.svg"
+              alt="Logo"
+              width={80}
+              height={80}
+              className="mb-4"
+            />
+            <h1 className="text-3xl font-bold text-gray-800">
+              Registro
+            </h1>
+          </div>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <Label htmlFor="name" className="text-gray-700">Nombre</Label>
+              <Input
+                id="name"
+                name="name"
+                type="text"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="John Doe"
+                required
+                aria-label="Nombre"
+                className="w-full mt-1"
+              />
             </div>
-            <div className="space-y-4">
-              <div className="grid gap-2">
-                <Label htmlFor="name">Nombre</Label>
-                <Input
-                  id="name"
-                  name="name"
-                  type="text"
-                  value={formData.name}
-                  onChange={handleChange}
-                  placeholder="John Doe"
-                  required
-                  aria-label="Nombre"
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="email@example.com"
-                  required
-                  aria-label="Email"
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="password">Contraseña</Label>
-                <Input
-                  id="password"
-                  name="password"
-                  type="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  placeholder="****"
-                  required
-                  aria-label="Contraseña"
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="confirm_password">Confirmar Contraseña</Label>
-                <Input
-                  id="confirm_password"
-                  name="confirm_password"
-                  type="password"
-                  value={formData.confirm_password}
-                  onChange={handleChange}
-                  placeholder="****"
-                  required
-                  aria-label="Confirmar Contraseña"
-                />
-              </div>
-              <RegisterButton type="submit">
-                <FaUserPlus className="mr-2 h-4 w-4" />
-                Registrarse
-              </RegisterButton>
+            <div>
+              <Label htmlFor="email" className="text-gray-700">Email</Label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="email@example.com"
+                required
+                aria-label="Email"
+                className="w-full mt-1"
+              />
             </div>
+            <div>
+              <Label htmlFor="password" className="text-gray-700">Contraseña</Label>
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="****"
+                required
+                aria-label="Contraseña"
+                className="w-full mt-1"
+              />
+            </div>
+            <div>
+              <Label htmlFor="confirm_password" className="text-gray-700">Confirmar Contraseña</Label>
+              <Input
+                id="confirm_password"
+                name="confirm_password"
+                type="password"
+                value={formData.confirm_password}
+                onChange={handleChange}
+                placeholder="****"
+                required
+                aria-label="Confirmar Contraseña"
+                className="w-full mt-1"
+              />
+            </div>
+            <RegisterButton type="submit" className="w-full">
+              <FaUserPlus className="mr-2 h-4 w-4" />
+              Registrarse
+            </RegisterButton>
           </form>
-          <p className="mt-2 text-muted-foreground">
+          <p className="mt-6 text-center text-gray-600">
             ¿Ya tienes una cuenta?{" "}
-            <Link href="/login" className="text-primary hover:underline">
-              Inicia sesión
+            <Link
+              href="/login"
+              className="text-blue-600 hover:underline"
+              prefetch={false}
+            >
+              Iniciar Sesión
             </Link>
           </p>
         </div>
-      </div>
+      </main>
+      <footer className="bg-gray-800 text-white text-center py-4 mt-12">
+        <p>&copy; 2024 UrbanoAcceso. Todos los derechos reservados.</p>
+      </footer>
     </div>
   );
 };

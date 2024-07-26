@@ -1,8 +1,16 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Image from 'next/image';
 import Link from "next/link";
 
 const NavBar = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
     <nav className="bg-white shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -40,7 +48,7 @@ const NavBar = () => {
             </Link>            
           </div>
           <div className="md:hidden flex items-center">
-            <button className="mobile-menu-button">
+            <button className="mobile-menu-button" onClick={toggleMenu}>
               <svg
                 className="w-6 h-6"
                 fill="none"
@@ -59,18 +67,18 @@ const NavBar = () => {
           </div>
         </div>
       </div>
-      <div className="hidden mobile-menu md:hidden">
+      <div className={`mobile-menu md:hidden ${isMenuOpen ? 'block' : 'hidden'}`}>
         <Link href="/" className="block py-2 px-4 text-sm hover:bg-gray-200">
           Inicio
         </Link>
         <Link href="/about" className="block py-2 px-4 text-sm hover:bg-gray-200">
           About Us
         </Link>
-        <Link href="/Precios" className="block py-2 px-4 text-sm hover:bg-gray-200">
+        <Link href="/prices" className="block py-2 px-4 text-sm hover:bg-gray-200">
           Precios
         </Link>
         <Link
-          href="/Contacto"
+          href="/contact"
           className="block py-2 px-4 text-sm hover:bg-gray-200"
         >
           Contacto
