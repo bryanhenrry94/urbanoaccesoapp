@@ -135,7 +135,7 @@ const LoginPage: React.FC = () => {
         </form>
         <LoginGoogle
           className="w-full"
-          onClick={(e) => handleLoginWithGoogle(e)}
+          onClick={(e) => handleLoginWithGoogle}
         >
           <FaGoogle className="mr-2 h-4 w-4 " />
           Ingresar con Google
