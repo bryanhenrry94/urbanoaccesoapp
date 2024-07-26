@@ -101,8 +101,16 @@ const authHandler = NextAuth({
     },
     async session({ session, user, token }) {
       // Send properties to the client, like an access_token and user id from a provider.
-      // session.accessToken = token.accessToken;
-      // session.user.id = token.id;
+      /*
+      if (token.accessToken) {
+        session.accessToken = token.accessToken as string;
+      }
+      if (session.user && token.id) {
+        session.user.id = token.id as string;
+      }
+      */
+
+      console.log("session", session);
 
       return session;
     },

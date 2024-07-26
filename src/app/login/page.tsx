@@ -42,29 +42,31 @@ const LoginPage: React.FC = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
     // Evitar loguear datos sensibles en producción
-    if (process.env.NODE_ENV !== "production") {
-      console.log("Form data:", formData);
+    // if (process.env.NODE_ENV !== "production") {
+    //}
 
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-        }),
-      });
+    console.log("Form data:", formData);
 
-      if (res.ok) {
-        const user = await res.json();
-        console.log("User logged in:", user);
-      } else {
-        console.log("Login failed");
-      }
-    }
     // Aquí puedes manejar el envío del formulario, como hacer una solicitud a una API.
+    const res = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: formData.email,
+        password: formData.password,
+      }),
+    });
+
+    if (res.ok) {
+      const user = await res.json();
+      console.log("User logged in:", user);
+    } else {
+      console.log("Login failed");
+    }
   };
 
   const handleLoginWithGoogle = async (
@@ -75,6 +77,7 @@ const LoginPage: React.FC = () => {
     try {
       const result = await signIn("google", { redirect: false });
 
+      /*
       console.log("Sign-in result:", result);
 
       if (result && result.ok) {
@@ -84,6 +87,19 @@ const LoginPage: React.FC = () => {
           "Error during sign in:",
           result?.error || "Unknown error"
         );
+      }
+      */
+
+      console.log("Resultado del inicio de sesión:", result);
+
+      if (result === undefined) {
+        // El inicio de sesión podría estar procesándose en otra ventana/pestaña
+        console.log("El inicio de sesión se está procesando en otra ventana");
+      } else if (result.error) {
+        console.error("Error durante el inicio de sesión:", result.error);
+      } else {
+        // El inicio de sesión exitoso debería redirigir automáticamente
+        console.log("Inicio de sesión exitoso, redirigiendo...");
       }
     } catch (error) {
       console.error("Unexpected error during sign in:", error);
