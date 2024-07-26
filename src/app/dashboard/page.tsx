@@ -2,7 +2,7 @@
 "use client";
 
 import { signOut, useSession } from "next-auth/react";
-import Image from "next/image"
+import Image from "next/image";
 
 export default function Page() {
   const { data: session } = useSession();

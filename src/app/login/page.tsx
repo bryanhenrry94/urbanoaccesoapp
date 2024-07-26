@@ -47,25 +47,21 @@ const LoginPage: React.FC = () => {
     // if (process.env.NODE_ENV !== "production") {
     //}
 
-    console.log("Form data:", formData);
-
-    // Aquí puedes manejar el envío del formulario, como hacer una solicitud a una API.
-    const res = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: formData.email,
-        password: formData.password,
-      }),
+    // Iniciar sesión automáticamente después del registro
+    const signInResult = await signIn("credentials", {
+      email: formData.email,
+      password: formData.password,
+      redirect: false,
     });
 
-    if (res.ok) {
-      const user = await res.json();
-      console.log("User logged in:", user);
+    console.log("signInResult", signInResult);
+
+    if (signInResult?.error) {
+      console.error("Error signing in:", signInResult.error);
+      alert("Credenciales inválidas. Por favor, intente de nuevo.");
     } else {
-      console.log("Login failed");
+      // Redirigir al dashboard después del inicio de sesión exitoso
+      router.push("/dashboard");
     }
   };
 
@@ -76,19 +72,6 @@ const LoginPage: React.FC = () => {
 
     try {
       const result = await signIn("google", { redirect: false });
-
-      /*
-      console.log("Sign-in result:", result);
-
-      if (result && result.ok) {
-        router.push("/dashboard");
-      } else {
-        console.error(
-          "Error during sign in:",
-          result?.error || "Unknown error"
-        );
-      }
-      */
 
       console.log("Resultado del inicio de sesión:", result);
 
@@ -160,7 +143,7 @@ const LoginPage: React.FC = () => {
         <p className="mt-2 text-muted-foreground">
           ¿No tienes una cuenta?
           <Link
-            href="#"
+            href="/register"
             className="font-medium text-primary hover:underline"
             prefetch={false}
           >
