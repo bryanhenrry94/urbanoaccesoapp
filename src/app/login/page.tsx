@@ -72,9 +72,10 @@ const LoginPage: React.FC = () => {
   };
 
   const handleLoginWithGoogle = async (
-    e: React.MouseEventHandler<HTMLButtonElement>
+    e: React.MouseEvent<HTMLButtonElement>
   ) => {
     // Inicia sesión y redirige después de que el proceso de inicio de sesión esté completo
+    console.log('clic en login with google');
     const result = await signIn("google", { redirect: false });
 
     if (result?.ok) {
@@ -135,7 +136,7 @@ const LoginPage: React.FC = () => {
         </form>
         <LoginGoogle
           className="w-full"
-          onClick={(e) => handleLoginWithGoogle}
+          onClick={handleLoginWithGoogle}
         >
           <FaGoogle className="mr-2 h-4 w-4 " />
           Ingresar con Google

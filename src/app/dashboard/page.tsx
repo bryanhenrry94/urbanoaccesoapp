@@ -22,7 +22,9 @@ export default function Page() {
             <Image
               src={session.user.image}
               alt={session.user.name ?? "User Image"}
-              className="rounded-full w-10 h-10"
+              width={50}
+              height={50}
+              className="rounded-full"
             />
           )}
         </div>
