@@ -7,7 +7,9 @@ const nextConfig = {
             'cdn.example.com',
             'urbanoaccesoapp.vercel.app',
             'writestylesonline.com',
-            'localhost'
+            'localhost',
+            'www.orbis.com.ar',
+            'test.localhost'
         ],
     },
 };

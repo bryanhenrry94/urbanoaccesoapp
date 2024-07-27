@@ -10,7 +10,6 @@ import Image from "next/image";
 import { signIn, useSession } from "next-auth/react";
 import { FaKey, FaGoogle } from "react-icons/fa";
 import { useRouter } from "next/navigation";
-import NavBar from "@/components/ui/Navbar";
 
 interface LoginForm {
   email: string;
@@ -26,10 +25,9 @@ const LoginPage: React.FC = () => {
     password: "",
   });
 
-
   useEffect(() => {
     if (status === "authenticated") {
-      router.push("/dashboard");
+      router.push("/admin");
     }
   }, [status, router]);
 
@@ -44,17 +42,24 @@ const LoginPage: React.FC = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    const signInResult = await signIn("credentials", {
-      email: formData.email,
-      password: formData.password,
-      redirect: false,
-    });
+    try {
+      const signInResult = await signIn("credentials", {
+        email: formData.email,
+        password: formData.password,
+        redirect: false,
+      });
 
-    if (signInResult?.error) {
-      console.error("Error signing in:", signInResult.error);
-      alert("Credenciales inválidas. Por favor, intente de nuevo.");
-    } else {
-      router.push("/dashboard");
+      if (signInResult?.error) {
+        console.error("Error signing in:", signInResult.error);
+        alert("Credenciales inválidas. Por favor, intente de nuevo.");
+      } else {
+        router.push("/admin");
+      }
+    } catch (error) {
+      console.error("Error during login process:", error);
+      alert(
+        "Ocurrió un error durante el proceso de inicio de sesión. Por favor, intente de nuevo."
+      );
     }
   };
 
@@ -71,7 +76,7 @@ const LoginPage: React.FC = () => {
       } else if (result.error) {
         console.error("Error durante el inicio de sesión:", result.error);
       } else {
-        console.log("Inicio de sesión exitoso, redirigiendo...");        
+        console.log("Inicio de sesión exitoso, redirigiendo...");
       }
 
       router.push("/dashboard");
@@ -81,80 +86,109 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <NavBar />
-      <main className="container mx-auto px-4 py-8">
-        <div className="max-w-md mx-auto bg-white shadow-lg rounded-lg p-8">
-          <div className="flex flex-col items-center mb-6">
+    <div className="min-h-screen bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+      <div className="flex w-full max-w-6xl bg-white rounded-xl shadow-2xl overflow-hidden">
+        <div className="w-1/2 p-10 space-y-8">
+          <div className="flex flex-col items-center">
             <Image
               src="/UrbanoAcceso.svg"
               alt="Logo"
-              width={80}
-              height={80}
-              className="mb-4"
+              width={100}
+              height={100}
+              className="mb-6"
             />
-            <h1 className="text-3xl font-bold text-gray-800">
+            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
               Inicio de Sesión
-            </h1>
+            </h2>
           </div>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <Label htmlFor="email" className="text-gray-700">Usuario</Label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="email@example.com"
-                required
-                aria-label="Email"
-                className="w-full mt-1"
-              />
+          <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+            <div className="rounded-md shadow-sm -space-y-px">
+              <div>
+                <Label htmlFor="email" className="sr-only">
+                  Usuario
+                </Label>
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  placeholder="Email"
+                  value={formData.email}
+                  onChange={handleChange}
+                />
+              </div>
+              <div>
+                <Label htmlFor="password" className="sr-only">
+                  Contraseña
+                </Label>
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  autoComplete="current-password"
+                  required
+                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  placeholder="Contraseña"
+                  value={formData.password}
+                  onChange={handleChange}
+                />
+              </div>
             </div>
+
             <div>
-              <Label htmlFor="password" className="text-gray-700">Contraseña</Label>
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="****"
-                required
-                aria-label="Contraseña"
-                className="w-full mt-1"
-              />
+              <LoginButton
+                type="submit"
+                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                <FaKey className="mr-2 h-4 w-4" />
+                Ingresar
+              </LoginButton>
             </div>
-            <LoginButton type="submit" className="w-full">
-              <FaKey className="mr-2 h-4 w-4" />
-              Ingresar
-            </LoginButton>
           </form>
-          <div className="my-6 flex items-center justify-between">
-            <hr className="w-full" />
-            <span className="px-2 text-gray-500">O</span>
-            <hr className="w-full" />
+
+          <div className="mt-6">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-white text-gray-500">O continúa con</span>
+              </div>
+            </div>
+
+            <div className="mt-6">
+              <LoginGoogle
+                onClick={handleLoginWithGoogle}
+                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                <FaGoogle className="mr-2 h-5 w-5" />
+                Ingresar con Google
+              </LoginGoogle>
+            </div>
           </div>
-          <LoginGoogle className="w-full" onClick={handleLoginWithGoogle}>
-            <FaGoogle className="mr-2 h-4 w-4" />
-            Ingresar con Google
-          </LoginGoogle>
-          <p className="mt-6 text-center text-gray-600">
+
+          <p className="mt-6 text-center text-sm text-gray-600">
             ¿No tienes una cuenta?{" "}
             <Link
               href="/register"
-              className="text-blue-600 hover:underline"
-              prefetch={false}
+              className="font-medium text-indigo-600 hover:text-indigo-500"
             >
               Registrar
             </Link>
           </p>
         </div>
-      </main>
-      <footer className="bg-gray-800 text-white text-center py-4 mt-12">
-        <p>&copy; 2024 UrbanoAcceso. Todos los derechos reservados.</p>
-      </footer>
+        <div className="w-1/2 bg-gray-100 flex items-center justify-center">
+          <Image
+            src="/images/expense-management.svg"
+            alt="Expense Management"
+            width={400}
+            height={400}
+            className="object-cover"
+          />
+        </div>
+      </div>
     </div>
   );
 };
