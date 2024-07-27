@@ -1,14 +1,16 @@
 import { sql } from "@vercel/postgres";
 import { NextResponse } from "next/server";
+import { useTenant } from '@/contexts/TenantContext';
 
 export async function POST(request: Request) {
   const { email, name, password_hash, image } = await request.json();
+  const { tenant } = useTenant();
 
   try {
     // Insert the new user
     await sql`
-      INSERT INTO users (email, name, password_hash, image)
-      VALUES (${email}, ${name}, ${password_hash}, ${image})
+      INSERT INTO users (email, name, password_hash, image, tenant_id)
+      VALUES (${email}, ${name}, ${password_hash}, ${image}, ${tenant?.id})
     `;
 
     // Select the newly created user

@@ -3,9 +3,14 @@
 
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
+import { useTenant } from "@/contexts/TenantContext";
 
 export default function Page() {
   const { data: session } = useSession();
+
+  const { tenant } = useTenant();
+
+  console.log(tenant);
 
   const handleLogout = (e: React.MouseEvent<HTMLButtonElement>) => {
     signOut({ callbackUrl: "/login" });
@@ -13,11 +18,14 @@ export default function Page() {
 
   return (
     <>
-      <h1>Hello, Dashboard!</h1>
+      <h1>Bienvenido a {tenant?.name}</h1>
+      <p>Subdominio: {tenant?.subdomain}</p>
+
       {session?.user ? (
         <div>
           <h2>{session.user.name}</h2>
           <h2>{session.user.email}</h2>
+          {/* Renderiza la imagen del usuario si está disponible 
           {session.user.image && (
             <Image
               src={session.user.image}
@@ -27,6 +35,7 @@ export default function Page() {
               className="rounded-full"
             />
           )}
+          */}
         </div>
       ) : (
         <p>Loading...</p>

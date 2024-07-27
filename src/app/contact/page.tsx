@@ -13,9 +13,9 @@ const ContactPage = () => {
           <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">No pierdas la oportunidad de gestionar los gastos comunitarios de tu urbanización</h2>
           
           <div className="flex justify-center space-x-4 mb-8">
-            <button className="bg-blue-500 text-white px-6 py-3 rounded-md hover:bg-blue-600 transition duration-300">
+            <Link href="/register" className="bg-blue-500 text-white px-6 py-3 rounded-md hover:bg-blue-600 transition duration-300">
               Empieza hoy gratis 30 días
-            </button>
+            </Link>
             <Link href="/contact" className="bg-green-500 text-white px-6 py-3 rounded-md hover:bg-green-600 transition duration-300">
               Visita la demo del sistema
             </Link>

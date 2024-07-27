@@ -26,6 +26,7 @@ const LoginPage: React.FC = () => {
     password: "",
   });
 
+
   useEffect(() => {
     if (status === "authenticated") {
       router.push("/dashboard");

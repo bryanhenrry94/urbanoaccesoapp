@@ -4,6 +4,7 @@ import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { sql } from '@vercel/postgres';
+import { getSession } from "next-auth/react";
 
 const authHandler = NextAuth({
   providers: [
@@ -24,7 +25,10 @@ const authHandler = NextAuth({
 
         try {
           const result = await sql`
-            SELECT * FROM users WHERE email = ${credentials.email}
+            SELECT u.*, t.subdomain
+            FROM users u
+            JOIN tenants t ON u.tenant_id = t.id
+            WHERE u.email = ${credentials.email}
           `;
 
           const user = result.rows[0];
@@ -44,6 +48,7 @@ const authHandler = NextAuth({
             email: user.email,
             name: user.name,
             image: user.image,
+            tenantSubdomain: user.subdomain,
           };
         } catch (error) {
           console.error('Error during credentials authorization:', error);
@@ -61,15 +66,9 @@ const authHandler = NextAuth({
     async signIn({ user, account, profile, email, credentials }) {
       try {
         if (account?.provider === 'google') {
-          console.log("user", user);  
-          console.log("account", account);
-          console.log("profile", profile);
-          console.log("email", email);
-          console.log("credentials", credentials);
-          
           // Verificar si el usuario ya existe llamando a la API
           const checkUserResponse = await fetch(
-            `${process.env.API_URL}/users/check/?email=${user.email}`,
+            `/v1/users/check/?email=${user.email}`,
             {
               method: "GET",
               headers: {
@@ -82,7 +81,7 @@ const authHandler = NextAuth({
             throw new Error("Error al verificar el usuario");
           }
 
-          const { exists } = await checkUserResponse.json();
+          const { exists, tenantSubdomain } = await checkUserResponse.json();
 
           if (!exists) {
             // Generar un hash de contraseña temporal
@@ -91,7 +90,7 @@ const authHandler = NextAuth({
 
             // Si el usuario no existe, lo registramos llamando a la API
             const registerResponse = await fetch(
-              `${process.env.API_URL}/users/register`,
+              `/v1/users/register`,
               {
                 method: "POST",
                 headers: {
@@ -110,11 +109,11 @@ const authHandler = NextAuth({
               throw new Error("Error al registrar el usuario");
             }
 
-            const { createdUser } = await registerResponse.json();
+            const { createdUser, tenantSubdomain: newTenantSubdomain } = await registerResponse.json();
 
             // Asignar el rol 'user' por defecto
             const assignRoleResponse = await fetch(
-              `${process.env.API_URL}/user_roles/assign`,
+              `/v1/user_roles/assign`,
               {
                 method: "POST",
                 headers: {
@@ -132,6 +131,18 @@ const authHandler = NextAuth({
             }
 
             // TODO: Enviar un correo al usuario con instrucciones para cambiar su contraseña temporal
+            
+            if ('tenantSubdomain' in user) {
+              user.tenantSubdomain = newTenantSubdomain;
+            } else {
+              (user as any).tenantSubdomain = newTenantSubdomain;
+            }
+          } else {
+            if ('tenantSubdomain' in user) {
+              user.tenantSubdomain = tenantSubdomain;
+            } else {
+              (user as any).tenantSubdomain = tenantSubdomain;
+            }
           }
         }
 
@@ -152,18 +163,23 @@ const authHandler = NextAuth({
       return Promise.resolve(baseUrl);
     },
     async session({ session, user, token }) {
-      console.log("session", session);
-      console.log("user", user);
-      console.log("token", token);
-
-      // if (token.sub) {
-      //   session.user.id = token.sub;
-      // }
+      if (token.sub && session.user) {
+        (session.user as any).id = token.sub;
+      }
+      if (token.tenantSubdomain && session.user) {
+        (session.user as any).tenantSubdomain = token.tenantSubdomain;
+      }
+      
       return session;
     },
     async jwt({ token, user, account, profile, isNewUser }) {
       if (user) {
         token.id = user.id;
+        if ('tenantSubdomain' in user) {
+          token.tenantSubdomain = user.tenantSubdomain;
+        } else {
+          token.tenantSubdomain = (user as any).tenantSubdomain;
+        }
       }
       if (account) {
         token.accessToken = account.access_token;

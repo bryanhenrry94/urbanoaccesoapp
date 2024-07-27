@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import NavBar from "@/components/ui/Navbar";
 import Image from "next/image";
@@ -7,7 +9,7 @@ const HomePage = () => {
     <div className="min-h-screen bg-gray-100">
       <NavBar />
       <main className="container mx-auto px-4 py-8">
-        <section className="text-center mb-24 mt-24">
+        <section className="text-center mb-12 mt-12">
           <h1 className="text-4xl font-bold text-gray-800 mb-4">
             Bienvenido a UrbanoAcceso
           </h1>
@@ -17,48 +19,55 @@ const HomePage = () => {
         </section>
 
         <section className="mb-12 max-w-4xl mx-auto">
-          <h2 className="text-3xl font-semibold text-gray-800 mb-6 text-center">
-            Explora las funcionalidades por rol
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold text-blue-600 mb-3">
-                Administrador
-              </h3>
-              <ul className="list-disc list-inside text-gray-700 mb-4">
-                <li>Gestión completa de residentes</li>
-                <li>Control financiero y reportes</li>
-                <li>Configuración de áreas comunes</li>
-              </ul>
+          <div className="bg-white p-8 rounded-lg shadow-md">
+            <h2 className="text-3xl font-semibold text-gray-800 mb-6 text-center">
+              Comienza por 30 días{" "}
+              <span className="text-4xl text-blue-600 font-bold">GRATIS</span>
+            </h2>
+            <p className="text-lg text-gray-600 text-center mb-8">
+              Prueba todas las funcionalidades de nuestra versión Pro sin compromiso. No pedimos números de tarjetas de crédito, sin recargo alguno.
+            </p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+              <div className="bg-gray-50 p-6 rounded-lg shadow-sm">
+                <h3 className="text-xl font-bold text-blue-600 mb-3">
+                  Administrador
+                </h3>
+                <ul className="list-disc list-inside text-gray-700">
+                  <li>Gestión completa de residentes</li>
+                  <li>Control financiero y reportes</li>
+                  <li>Configuración de áreas comunes</li>
+                </ul>
+              </div>
+              <div className="bg-gray-50 p-6 rounded-lg shadow-sm">
+                <h3 className="text-xl font-bold text-green-600 mb-3">
+                  Residente
+                </h3>
+                <ul className="list-disc list-inside text-gray-700">
+                  <li>Registro de visitantes</li>
+                  <li>Reserva de áreas comunes</li>
+                  <li>Pago de cuotas en línea</li>
+                </ul>
+              </div>
+              <div className="bg-gray-50 p-6 rounded-lg shadow-sm">
+                <h3 className="text-xl font-bold text-yellow-600 mb-3">
+                  Guardia de Seguridad
+                </h3>
+                <ul className="list-disc list-inside text-gray-700">
+                  <li>Control de acceso en tiempo real</li>
+                  <li>Registro de entradas y salidas</li>
+                  <li>Gestión de incidencias</li>
+                </ul>
+              </div>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold text-green-600 mb-3">
-                Residente
-              </h3>
-              <ul className="list-disc list-inside text-gray-700 mb-4">
-                <li>Registro de visitantes</li>
-                <li>Reserva de áreas comunes</li>
-                <li>Pago de cuotas en línea</li>
-              </ul>
+            <div className="text-center">
+              <a
+                href="/register"
+                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-lg transition duration-300 text-lg inline-block"
+              >
+                Comenzar prueba gratuita
+              </a>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold text-yellow-600 mb-3">
-                Guardia de Seguridad
-              </h3>
-              <ul className="list-disc list-inside text-gray-700 mb-4">
-                <li>Control de acceso en tiempo real</li>
-                <li>Registro de entradas y salidas</li>
-                <li>Gestión de incidencias</li>
-              </ul>
-            </div>
-          </div>
-          <div className="mt-8 text-center">
-            <a
-              href="/login"
-              className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg transition duration-300"
-            >
-              Comenzar ahora
-            </a>
           </div>
         </section>
 
@@ -81,90 +90,28 @@ const HomePage = () => {
           </div>
         </section>
 
-        <section className="mb-12 max-w-3xl mx-auto">
-          <h2 className="text-3xl font-semibold text-gray-800 mb-6 text-center">
-            Comienza por 30 días{" "}
-            <span className="text-4xl text-blue-600 font-bold">GRATIS</span>
-          </h2>
-          <p className="text-xl text-gray-600 text-center mb-6">
-            Prueba todas las funcionalidades de nuestra versión Pro sin
-            compromiso
-          </p>
-          <ul className="list-none text-gray-700 space-y-2 mb-8 text-center">
-            <li className="flex items-center justify-center">
-              <span className="mr-2">✓</span>Control de acceso avanzado
-            </li>
-            <li className="flex items-center justify-center">
-              <span className="mr-2">✓</span>Gestión de visitantes en tiempo
-              real
-            </li>
-            <li className="flex items-center justify-center">
-              <span className="mr-2">✓</span>Reportes y análisis detallados
-            </li>
-            <li className="flex items-center justify-center">
-              <span className="mr-2">✓</span>Integración con sistemas de
-              seguridad
-            </li>
-            <li className="flex items-center justify-center">
-              <span className="mr-2">✓</span>Comunicación directa con residentes
-            </li>
-            <li className="flex items-center justify-center">
-              <span className="mr-2">✓</span>Reserva de áreas comunes
-            </li>
-            <li className="flex items-center justify-center">
-              <span className="mr-2">✓</span>Gestión de pagos y cuotas
-            </li>
-            <li className="flex items-center justify-center">
-              <span className="mr-2">✓</span>Soporte técnico prioritario
-            </li>
-          </ul>
+        <section className="mb-12 max-w-3xl mx-auto p-8">
           <div className="text-center">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+              ¿Necesitas ayuda en el proceso?
+            </h2>
+            <p className="text-gray-700 mb-4">
+              Te asesoramos{" "}
+              <span className="text-blue-600 font-bold text-2xl">
+                sin costo
+              </span>{" "}
+              vía Google Meet
+            </p>
             <a
-              href="/signup"
+              href="/contact"
               className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg transition duration-300 text-lg"
             >
-              Comenzar prueba gratuita
+              Reservar asesoría
             </a>
           </div>
         </section>
 
-        <section className="mb-12 max-w-3xl mx-auto bg-gray-100 p-8 rounded-lg shadow-md">
-          <h2 className="text-3xl font-semibold text-gray-800 mb-6 text-center">
-            Crea tu urbanización en línea en menos de 5 minutos
-          </h2>
-          <p className="text-xl text-gray-600 text-center mb-6">
-            Pon tu urbanización al alcance de todos tus residentes de manera
-            rápida y sencilla.
-          </p>
-          <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
-            <a
-              href="/crear-urbanizacion"
-              className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg transition duration-300 text-lg"
-            >
-              Crear urbanización
-            </a>
-            <div className="text-center">
-              <p className="text-gray-700 mb-2">
-                ¿Necesitas ayuda en el proceso?
-              </p>
-              <p className="text-gray-700 mb-4">
-                Te asesoramos{" "}
-                <span className="text-blue-600 font-bold text-2xl">
-                  sin costo
-                </span>{" "}
-                vía Google Meet
-              </p>
-              <a
-                href="/contact"
-                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg transition duration-300 text-lg"
-              >
-                Reservar asesoría
-              </a>
-            </div>
-          </div>
-        </section>
-
-        <section className="mb-12 max-w-3xl mx-auto bg-gray-100 p-8 rounded-lg shadow-md">
+        <section className="mb-12 max-w-1xl mx-auto bg-gray-100 p-8 rounded-lg shadow-md">
           <h2 className="text-3xl font-semibold text-gray-800 mb-6 text-center">
             Características del Producto
           </h2>

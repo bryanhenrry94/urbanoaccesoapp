@@ -72,7 +72,7 @@ const NavBar = () => {
           Inicio
         </Link>
         <Link href="/about" className="block py-2 px-4 text-sm hover:bg-gray-200">
-          About Us
+          Sobre Nosotros
         </Link>
         <Link href="/prices" className="block py-2 px-4 text-sm hover:bg-gray-200">
           Precios
