@@ -30,7 +30,7 @@ export async function middleware(req: NextRequest) {
 
   // Add the current tenant to headers for later use in the application
   const requestHeaders = new Headers(req.headers);
-  requestHeaders.set("x-tenant", token?.tenantSubdomain || "");
+  requestHeaders.set("x-tenant", token?.tenantSubdomain as string);
 
   // Allow access to non-protected routes
   return NextResponse.next({
