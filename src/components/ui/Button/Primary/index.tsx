@@ -1,14 +1,14 @@
 import React from "react";
 
-const index = (props: React.ButtonHTMLAttributes<HTMLButtonElement>) => {
+const PrimaryButton = (props: React.ButtonHTMLAttributes<HTMLButtonElement>) => {
   return (
     <button
       {...props}
-      className={`bg-black border hover:bg-gray-800 text-white w-full flex items-center justify-center p-2 rounded-md ${props.className}`}
+      className={`bg-[var(--color-primary)] hover:bg-[var(--color-primary-dark)] text-white w-full flex items-center justify-center py-2 px-4 rounded transition-all duration-[var(--transition-speed)] ${props.className}`}
     >
       {props.children}
     </button>
   );
 };
 
-export default index;
+export default PrimaryButton;

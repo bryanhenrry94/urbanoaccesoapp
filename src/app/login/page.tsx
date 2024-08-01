@@ -86,8 +86,8 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-      <div className="flex w-full max-w-6xl bg-white rounded-xl shadow-2xl overflow-hidden">
+    <div className="min-h-screen bg-background-alt flex items-center justify-center">
+      <div className="flex w-full max-w-6xl bg-background rounded-xl shadow-2xl overflow-hidden">
         <div className="w-1/2 p-10 space-y-8">
           <div className="flex flex-col items-center">
             <Image
@@ -97,7 +97,7 @@ const LoginPage: React.FC = () => {
               height={100}
               className="mb-6"
             />
-            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+            <h2 className="mt-6 text-center text-3xl font-extrabold text-text">
               Inicio de Sesión
             </h2>
           </div>
@@ -113,7 +113,7 @@ const LoginPage: React.FC = () => {
                   type="email"
                   autoComplete="email"
                   required
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-border placeholder-text-light text-text rounded-t-md focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm"
                   placeholder="Email"
                   value={formData.email}
                   onChange={handleChange}
@@ -129,7 +129,7 @@ const LoginPage: React.FC = () => {
                   type="password"
                   autoComplete="current-password"
                   required
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-border placeholder-text-light text-text rounded-b-md focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm"
                   placeholder="Contraseña"
                   value={formData.password}
                   onChange={handleChange}
@@ -140,7 +140,7 @@ const LoginPage: React.FC = () => {
             <div>
               <LoginButton
                 type="submit"
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-default"
               >
                 <FaKey className="mr-2 h-4 w-4" />
                 Ingresar
@@ -151,17 +151,17 @@ const LoginPage: React.FC = () => {
           <div className="mt-6">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300"></div>
+                <div className="w-full border-t border-border"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">O continúa con</span>
+                <span className="px-2 bg-background text-text-light">O continúa con</span>
               </div>
             </div>
 
             <div className="mt-6">
               <LoginGoogle
                 onClick={handleLoginWithGoogle}
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-text bg-secondary hover:bg-secondary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-default"
               >
                 <FaGoogle className="mr-2 h-5 w-5" />
                 Ingresar con Google
@@ -169,19 +169,19 @@ const LoginPage: React.FC = () => {
             </div>
           </div>
 
-          <p className="mt-6 text-center text-sm text-gray-600">
+          <p className="mt-6 text-center text-sm text-text-light">
             ¿No tienes una cuenta?{" "}
             <Link
               href="/register"
-              className="font-medium text-indigo-600 hover:text-indigo-500"
+              className="font-medium text-primary hover:text-primary-dark transition-default"
             >
               Registrar
             </Link>
           </p>
         </div>
-        <div className="w-1/2 bg-gray-100 flex items-center justify-center">
+        <div className="w-1/2 bg-secondary flex items-center justify-center">
           <Image
-            src="/images/expense-management.svg"
+            src="/images/login.svg"
             alt="Expense Management"
             width={400}
             height={400}

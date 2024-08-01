@@ -31,8 +31,8 @@ const StartPage = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen">
-      <div className="w-full md:w-2/5 lg:w-1/3 p-4 md:p-8 overflow-y-auto bg-white rounded-lg shadow-md">
+    <div className="flex flex-col md:flex-row min-h-screen bg-background-alt">
+      <div className="w-full md:w-2/5 lg:w-1/3 p-4 md:p-8 overflow-y-auto bg-background rounded-lg shadow-md">
         <div className="flex items-center">
           <Image
             src="/UrbanoAcceso.svg"
@@ -41,14 +41,14 @@ const StartPage = () => {
             width={100}
             height={100}
           />
-          <span className="text-xl font-semibold text-gray-800">
+          <span className="text-xl font-semibold text-text">
             <Link href="/">UrbanoAcceso</Link>
           </span>
         </div>
-        <h1 className="text-1xl md:text-3xl font-bold mb-4 md:mb-6 text-center">
+        <h1 className="text-1xl md:text-3xl font-bold mb-4 md:mb-6 text-center text-text">
           Bienvenido
         </h1>
-        <p className="mb-6 md:mb-8 text-sm md:text-base">
+        <p className="mb-6 md:mb-8 text-sm md:text-base text-text-light">
           Comencemos configurando tu cuenta y espacio de trabajo.
         </p>
 
@@ -114,30 +114,30 @@ const StartPage = () => {
               className="w-full"
             />
             {formData.url ? (
-              <p className="mt-2 text-sm text-green-600">URL: {formData.url}</p>
+              <p className="mt-2 text-sm text-primary">URL: {formData.url}</p>
             ) : (
-              <p className="mt-2 text-sm text-red-600">
+              <p className="mt-2 text-sm text-error">
                 El nombre del espacio de trabajo solo puede contener letras,
                 números y guiones
               </p>
             )}
           </div>
 
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full btn-primary hover:bg-[var(--color-primary-dark)] focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-opacity-50 transition-all duration-[var(--transition-speed)]">
             Comenzar
           </Button>
         </form>
-        <p className="mt-4 md:mt-6 text-center text-gray-600 text-sm md:text-base">
+        <p className="mt-4 md:mt-6 text-center text-text-light text-sm md:text-base">
           ¿Ya tienes una cuenta?{" "}
-          <Link href="/login" className="text-blue-600 hover:underline">
+          <Link href="/login" className="text-primary hover:text-primary-dark transition-default">
             Iniciar Sesión
           </Link>
         </p>
       </div>
 
-      <div className="w-full md:w-3/5 lg:w-2/3 relative bg-slate-100 flex items-center justify-center">
+      <div className="w-full md:w-3/5 lg:w-2/3 relative bg-secondary flex items-center justify-center">
         <Image
-          src="/images/building_websites.svg"
+          src="/images/register.svg"
           alt="Imagen de bienvenida"
           layout="responsive"
           width={1200}

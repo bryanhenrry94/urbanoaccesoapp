@@ -21,16 +21,16 @@ export default function ErrorPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-6xl font-bold text-gray-800 mb-4">404</h1>
-        <p className="text-xl text-gray-600 mb-8">Oops! Page not found.</p>
-        <p className="text-md text-gray-500 mb-4">
+    <div className="min-h-screen flex items-center justify-center bg-background-alt">
+      <div className="text-center bg-background shadow-lg rounded-lg p-8">
+        <h1 className="text-6xl font-bold text-text mb-4">404</h1>
+        <p className="text-xl text-text-light mb-8">Oops! Page not found.</p>
+        <p className="text-md text-text-light mb-4">
           You will be signed out and redirected to the home page in 5 seconds.
         </p>
         <button
           onClick={handleLogout}
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+          className="btn-primary hover:bg-primary-dark transition-default"
         >
           Go Home
         </button>

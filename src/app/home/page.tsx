@@ -6,54 +6,54 @@ import Image from "next/image";
 
 const HomePage = () => {
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-background-alt">
       <NavBar />
       <main className="container mx-auto px-4 py-8">
         <section className="text-center mb-12 mt-12">
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">
+          <h1 className="text-4xl font-bold text-text mb-4">
             Bienvenido a UrbanoAcceso
           </h1>
-          <p className="text-xl text-gray-600">
+          <p className="text-xl text-text-light">
             Su solución integral para el control y gestión de urbanizaciones
           </p>
         </section>
 
         <section className="mb-12 max-w-4xl mx-auto">
-          <div className="bg-white p-8 rounded-lg shadow-md">
-            <h2 className="text-3xl font-semibold text-gray-800 mb-6 text-center">
+          <div className="bg-background p-8 rounded-lg shadow-md">
+            <h2 className="text-3xl font-semibold text-text mb-6 text-center">
               Comienza por 30 días{" "}
-              <span className="text-4xl text-blue-600 font-bold">GRATIS</span>
+              <span className="text-4xl text-primary font-bold">GRATIS</span>
             </h2>
-            <p className="text-lg text-gray-600 text-center mb-8">
+            <p className="text-lg text-text-light text-center mb-8">
               Prueba todas las funcionalidades de nuestra versión Pro sin compromiso. No pedimos números de tarjetas de crédito, sin recargo alguno.
             </p>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-              <div className="bg-gray-50 p-6 rounded-lg shadow-sm">
-                <h3 className="text-xl font-bold text-blue-600 mb-3">
+              <div className="bg-secondary p-6 rounded-lg shadow-sm">
+                <h3 className="text-xl font-bold text-primary mb-3">
                   Administrador
                 </h3>
-                <ul className="list-disc list-inside text-gray-700">
+                <ul className="list-disc list-inside text-text">
                   <li>Gestión completa de residentes</li>
                   <li>Control financiero y reportes</li>
                   <li>Configuración de áreas comunes</li>
                 </ul>
               </div>
-              <div className="bg-gray-50 p-6 rounded-lg shadow-sm">
-                <h3 className="text-xl font-bold text-green-600 mb-3">
+              <div className="bg-secondary p-6 rounded-lg shadow-sm">
+                <h3 className="text-xl font-bold text-primary mb-3">
                   Residente
                 </h3>
-                <ul className="list-disc list-inside text-gray-700">
+                <ul className="list-disc list-inside text-text">
                   <li>Registro de visitantes</li>
                   <li>Reserva de áreas comunes</li>
                   <li>Pago de cuotas en línea</li>
                 </ul>
               </div>
-              <div className="bg-gray-50 p-6 rounded-lg shadow-sm">
-                <h3 className="text-xl font-bold text-yellow-600 mb-3">
+              <div className="bg-secondary p-6 rounded-lg shadow-sm">
+                <h3 className="text-xl font-bold text-primary mb-3">
                   Guardia de Seguridad
                 </h3>
-                <ul className="list-disc list-inside text-gray-700">
+                <ul className="list-disc list-inside text-text">
                   <li>Control de acceso en tiempo real</li>
                   <li>Registro de entradas y salidas</li>
                   <li>Gestión de incidencias</li>
@@ -63,7 +63,7 @@ const HomePage = () => {
             <div className="text-center">
               <a
                 href="/register"
-                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-lg transition duration-300 text-lg inline-block"
+                className="btn-primary"
               >
                 Comenzar prueba gratuita
               </a>
@@ -72,7 +72,7 @@ const HomePage = () => {
         </section>
 
         <section className="mb-12 max-w-3xl mx-auto">
-          <h2 className="text-3xl font-semibold text-gray-800 mb-6 text-center">
+          <h2 className="text-3xl font-semibold text-text mb-6 text-center">
             Descubre UrbanoAcceso
           </h2>
           <div
@@ -90,91 +90,91 @@ const HomePage = () => {
           </div>
         </section>
 
-        <section className="mb-12 max-w-3xl mx-auto p-8">
+        <section className="mb-12 max-w-3xl mx-auto p-8 bg-secondary rounded-lg">
           <div className="text-center">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+            <h2 className="text-2xl font-semibold text-text mb-4">
               ¿Necesitas ayuda en el proceso?
             </h2>
-            <p className="text-gray-700 mb-4">
+            <p className="text-text mb-4">
               Te asesoramos{" "}
-              <span className="text-blue-600 font-bold text-2xl">
+              <span className="text-primary font-bold text-2xl">
                 sin costo
               </span>{" "}
               vía Google Meet
             </p>
             <a
               href="/contact"
-              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg transition duration-300 text-lg"
+              className="btn-primary"
             >
               Reservar asesoría
             </a>
           </div>
         </section>
 
-        <section className="mb-12 max-w-1xl mx-auto bg-gray-100 p-8 rounded-lg shadow-md">
-          <h2 className="text-3xl font-semibold text-gray-800 mb-6 text-center">
+        <section className="mb-12 max-w-1xl mx-auto bg-secondary p-8 rounded-lg shadow-md">
+          <h2 className="text-3xl font-semibold text-text mb-6 text-center">
             Características del Producto
           </h2>
           <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-gray-50 rounded-lg p-6 shadow-md flex flex-col items-center justify-center">
+            <div className="bg-background rounded-lg p-6 shadow-md flex flex-col items-center justify-center">
               <Image
                 src="/images/accessibility.svg"
                 alt="Accesibilidad Total"
                 width={300}
                 height={200}
               />
-              <h3 className="text-xl font-semibold text-gray-700 mb-2 text-center">
+              <h3 className="text-xl font-semibold text-primary mb-2 text-center">
                 Accesibilidad Total
               </h3>
-              <p className="text-gray-600 text-center">
+              <p className="text-text-light text-center">
                 Controle y monitoree el acceso a su urbanización desde cualquier
                 lugar y en cualquier momento, utilizando nuestra aplicación
                 móvil o plataforma web.
               </p>
             </div>
-            <div className="bg-gray-50 rounded-lg p-6 shadow-md flex flex-col items-center justify-center">
+            <div className="bg-background rounded-lg p-6 shadow-md flex flex-col items-center justify-center">
               <Image
                 src="/images/centralized-control.svg"
                 alt="Control Centralizado"
                 width={300}
                 height={200}
               />
-              <h3 className="text-xl font-semibold text-gray-700 mb-2 text-center">
+              <h3 className="text-xl font-semibold text-primary mb-2 text-center">
                 Control Centralizado
               </h3>
-              <p className="text-gray-600 text-center">
+              <p className="text-text-light text-center">
                 Gestione múltiples puntos de acceso, áreas comunes y servicios
                 desde un solo lugar, simplificando la administración de su
                 comunidad.
               </p>
             </div>
-            <div className="bg-gray-50 rounded-lg p-6 shadow-md flex flex-col items-center justify-center">
+            <div className="bg-background rounded-lg p-6 shadow-md flex flex-col items-center justify-center">
               <Image
                 src="/images/expense-management.svg"
                 alt="Gestión de Gastos Comunitarios"
                 width={300}
                 height={200}
               />
-              <h3 className="text-xl font-semibold text-gray-700 mb-2 text-center">
+              <h3 className="text-xl font-semibold text-primary mb-2 text-center">
                 Gestión de Gastos Comunitarios
               </h3>
-              <p className="text-gray-600 text-center">
+              <p className="text-text-light text-center">
                 Administre eficientemente los gastos de la comunidad, genere
                 informes y mantenga la transparencia financiera con nuestro
                 módulo de gestión de gastos integrado.
               </p>
             </div>
-            <div className="bg-gray-50 rounded-lg p-6 shadow-md flex flex-col items-center justify-center">
+            <div className="bg-background rounded-lg p-6 shadow-md flex flex-col items-center justify-center">
               <Image
                 src="/images/advanced-security.svg"
                 alt="Seguridad Avanzada"
                 width={300}
                 height={200}
               />
-              <h3 className="text-xl font-semibold text-gray-700 mb-2 text-center">
+              <h3 className="text-xl font-semibold text-primary mb-2 text-center">
                 Seguridad Avanzada
               </h3>
-              <p className="text-gray-600 text-center">
+              <p className="text-text-light text-center">
                 Implemente medidas de seguridad de última generación, incluyendo
                 reconocimiento facial, códigos QR dinámicos y notificaciones en
                 tiempo real.
@@ -183,9 +183,9 @@ const HomePage = () => {
           </div>
         </section>
 
-        <section className="mb-12 max-w-1xl mx-auto bg-gray-100 p-8 rounded-lg shadow-md">
+        <section className="mb-12 max-w-1xl mx-auto bg-secondary p-8 rounded-lg shadow-md">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-extrabold text-gray-900 text-center mb-8">
+            <h2 className="text-3xl font-extrabold text-text text-center mb-8">
               Comentarios y Reseñas
             </h2>
             <div className="flex overflow-x-auto space-x-6 pb-4">
@@ -217,16 +217,16 @@ const HomePage = () => {
               ].map((review, index) => (
                 <div
                   key={index}
-                  className="flex-none w-80 bg-gray-50 rounded-lg p-6 shadow-md"
+                  className="flex-none w-80 bg-background rounded-lg p-6 shadow-md"
                 >
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                  <h3 className="text-lg font-semibold text-primary mb-2">
                     {review.name}
                   </h3>
                   <div className="flex mb-2">
                     {[...Array(5)].map((_, i) => (
                       <svg
                         key={i}
-                        className={`w-5 h-5 ${i < review.rating ? "text-yellow-400" : "text-gray-300"}`}
+                        className={`w-5 h-5 ${i < review.rating ? "text-primary" : "text-gray-300"}`}
                         fill="currentColor"
                         viewBox="0 0 20 20"
                         xmlns="http://www.w3.org/2000/svg"
@@ -235,15 +235,15 @@ const HomePage = () => {
                       </svg>
                     ))}
                   </div>
-                  <p className="text-gray-600">{review.comment}</p>
+                  <p className="text-text-light">{review.comment}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        <section className="mb-12 max-w-1xl mx-auto bg-gray-100 p-8 rounded-lg shadow-md">
-          <h2 className="text-3xl font-semibold text-gray-800 mb-6 text-center">
+        <section className="mb-12 max-w-1xl mx-auto bg-secondary p-8 rounded-lg shadow-md">
+          <h2 className="text-3xl font-semibold text-text mb-6 text-center">
             Nuestros Clientes
           </h2>
           <div className="flex overflow-hidden">
@@ -313,7 +313,7 @@ const HomePage = () => {
         </section>
       </main>
 
-      <footer className="bg-gray-800 text-white text-center py-4 mt-12">
+      <footer className="bg-primary text-white text-center py-4 mt-12">
         <p>&copy; 2024 UrbanoAcceso. Todos los derechos reservados.</p>
       </footer>
     </div>

@@ -2,9 +2,67 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definir clases personalizadas en `@layer utilities` */
+:root {
+  --color-primary: #4A6F22;
+  --color-primary-light: #6B9E32;
+  --color-primary-dark: #3A5A1A;
+  --color-secondary: #F0F4EA;
+  --color-accent: #8B4513;
+  --color-text: #333333;
+  --color-text-light: #666666;
+  --color-background: #FFFFFF;
+  --color-background-alt: #F5F5F5;
+  --font-family: 'Inter', sans-serif;
+  --transition-speed: 0.3s;
+}
+
+@layer base {
+  body {
+    @apply bg-white text-[#333333] font-[var(--font-family)];
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold mb-4;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply font-bold py-2 px-4 rounded transition-all duration-[var(--transition-speed)];
+  }
+  .btn-primary {
+    @apply btn bg-[var(--color-primary)] hover:bg-[var(--color-primary-dark)] text-white;
+  }
+  .btn-secondary {
+    @apply btn bg-[var(--color-secondary)] hover:bg-[var(--color-primary-light)] text-[var(--color-primary)];
+  }
+  .card {
+    @apply bg-white rounded-lg shadow-md p-6;
+  }
+}
+
 @layer utilities {
-  .border-border {
-    border-color: #ff0000; /* Color de borde personalizado */
+  .text-primary {
+    color: var(--color-primary);
+  }
+  .bg-primary {
+    background-color: var(--color-primary);
+  }
+  .border-primary {
+    border-color: var(--color-primary);
+  }
+  .text-secondary {
+    color: var(--color-secondary);
+  }
+  .bg-secondary {
+    background-color: var(--color-secondary);
+  }
+  .text-accent {
+    color: var(--color-accent);
+  }
+  .bg-accent {
+    background-color: var(--color-accent);
+  }
+  .transition-default {
+    transition: all var(--transition-speed) ease-in-out;
   }
 }
