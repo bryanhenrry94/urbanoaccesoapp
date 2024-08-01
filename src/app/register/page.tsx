@@ -135,7 +135,7 @@ const StartPage = () => {
         </p>
       </div>
 
-      <div className="w-full md:w-3/5 lg:w-2/3 relative bg-secondary flex items-center justify-center">
+      <div className="hidden md:flex w-full md:w-3/5 lg:w-2/3 relative bg-secondary items-center justify-center">
         <Image
           src="/images/register.svg"
           alt="Imagen de bienvenida"

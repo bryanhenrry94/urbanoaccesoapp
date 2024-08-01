@@ -86,22 +86,22 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background-alt flex items-center justify-center">
-      <div className="flex w-full max-w-6xl bg-background rounded-xl shadow-2xl overflow-hidden">
-        <div className="w-1/2 p-10 space-y-8">
+    <div className="min-h-screen bg-background-alt flex items-center justify-center p-4">
+      <div className="flex flex-col md:flex-row w-full max-w-6xl bg-background rounded-xl shadow-2xl overflow-hidden">
+        <div className="w-full md:w-1/2 p-6 md:p-10 space-y-6 md:space-y-8">
           <div className="flex flex-col items-center">
             <Image
               src="/UrbanoAcceso.svg"
               alt="Logo"
-              width={100}
-              height={100}
-              className="mb-6"
+              width={80}
+              height={80}
+              className="mb-4 md:mb-6"
             />
-            <h2 className="mt-6 text-center text-3xl font-extrabold text-text">
+            <h2 className="mt-4 md:mt-6 text-center text-2xl md:text-3xl font-extrabold text-text">
               Inicio de Sesión
             </h2>
           </div>
-          <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          <form className="mt-6 md:mt-8 space-y-4 md:space-y-6" onSubmit={handleSubmit}>
             <div className="rounded-md shadow-sm -space-y-px">
               <div>
                 <Label htmlFor="email" className="sr-only">
@@ -148,7 +148,7 @@ const LoginPage: React.FC = () => {
             </div>
           </form>
 
-          <div className="mt-6">
+          <div className="mt-4 md:mt-6">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-border"></div>
@@ -158,7 +158,7 @@ const LoginPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="mt-6">
+            <div className="mt-4 md:mt-6">
               <LoginGoogle
                 onClick={handleLoginWithGoogle}
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-text bg-secondary hover:bg-secondary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-default"
@@ -169,7 +169,7 @@ const LoginPage: React.FC = () => {
             </div>
           </div>
 
-          <p className="mt-6 text-center text-sm text-text-light">
+          <p className="mt-4 md:mt-6 text-center text-sm text-text-light">
             ¿No tienes una cuenta?{" "}
             <Link
               href="/register"
@@ -179,13 +179,13 @@ const LoginPage: React.FC = () => {
             </Link>
           </p>
         </div>
-        <div className="w-1/2 bg-secondary flex items-center justify-center">
+        <div className="hidden md:flex w-full md:w-1/2 bg-secondary items-center justify-center p-6 md:p-0">
           <Image
             src="/images/login.svg"
             alt="Expense Management"
-            width={400}
-            height={400}
-            className="object-cover"
+            width={300}
+            height={300}
+            className="object-cover max-w-full h-auto"
           />
         </div>
       </div>
