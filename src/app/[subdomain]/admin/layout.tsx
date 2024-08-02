@@ -5,57 +5,66 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { useTenant } from "@/contexts/TenantContext";
-import { FaChartBar, FaUsers, FaCog, FaSignOutAlt } from 'react-icons/fa';
+import { FaChartBar, FaUsers, FaCog, FaSignOutAlt, FaBars, FaTimes } from "react-icons/fa";
+import { usePathname } from "next/navigation";
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const { data: session } = useSession();
   const { tenant } = useTenant();
   const [activeComponent, setActiveComponent] = useState("dashboard");
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   const handleLogout = () => {
     signOut({ callbackUrl: "/" });
   };
 
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleMenuClick = (component: string) => {
+    setActiveComponent(component);
+    setIsMenuOpen(false); // Collapse the menu
+  };
+
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100">
-      <header className="bg-indigo-600 text-white p-4 flex justify-between items-center shadow-md">
+    <div className="flex flex-col min-h-screen bg-background">
+      <header className="bg-primary text-white p-2 flex justify-between items-center shadow-md">
         <div className="flex items-center">
-          <h1 className="text-2xl font-bold">{tenant?.name} Admin</h1>
+          <button
+            onClick={toggleMenu}
+            className="md:hidden text-white text-2xl focus:outline-none mr-2"
+          >
+            {isMenuOpen ? <FaTimes /> : <FaBars />}
+          </button>
+          <span className="text-xl font-semibold text-white">UrbanoAcceso</span>
         </div>
         <div className="flex items-center">
-          {session?.user && (
-            <>
-              <span className="mr-4 font-semibold">{session.user.name}</span>
-              {session.user.image && (
-                <Image
-                  src="/team/picture1.jpg"
-                  alt={session.user.name ?? "User Image"}
-                  width={40}
-                  height={40}
-                  className="rounded-full mr-4 border-2 border-white"
-                />
-              )}
-            </>
-          )}
           <button
             onClick={handleLogout}
-            className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out flex items-center"
+            className="bg-danger hover:bg-danger-dark text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out flex items-center"
           >
             <FaSignOutAlt className="mr-2" />
-            Logout
           </button>
         </div>
       </header>
-      <div className="flex flex-1">
-        <nav className="bg-white w-64 p-6 shadow-lg">
+      <div className="flex flex-1 flex-col md:flex-row">
+        <nav className={`bg-background-alt w-full md:w-64 p-6 shadow-lg ${isMenuOpen ? 'block' : 'hidden'} md:block`}>
           <ul className="space-y-4">
             <li>
               <Link
                 href="/admin"
                 className={`flex items-center py-2 px-4 rounded-lg transition duration-300 ease-in-out ${
-                  activeComponent === "dashboard" ? "bg-indigo-100 text-indigo-600" : "hover:bg-gray-100"
+                  activeComponent === "dashboard"
+                    ? "bg-primary-light text-primary"
+                    : "hover:bg-background-light"
                 }`}
-                onClick={() => setActiveComponent("dashboard")}
+                onClick={() => handleMenuClick("dashboard")}
               >
                 <FaChartBar className="mr-3" />
                 Dashboard
@@ -65,9 +74,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <Link
                 href="/admin/users"
                 className={`flex items-center py-2 px-4 rounded-lg transition duration-300 ease-in-out ${
-                  activeComponent === "users" ? "bg-indigo-100 text-indigo-600" : "hover:bg-gray-100"
+                  activeComponent === "users"
+                    ? "bg-primary-light text-primary"
+                    : "hover:bg-background-light"
                 }`}
-                onClick={() => setActiveComponent("users")}
+                onClick={() => handleMenuClick("users")}
               >
                 <FaUsers className="mr-3" />
                 Users
@@ -77,9 +88,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <Link
                 href="/admin/settings"
                 className={`flex items-center py-2 px-4 rounded-lg transition duration-300 ease-in-out ${
-                  activeComponent === "settings" ? "bg-indigo-100 text-indigo-600" : "hover:bg-gray-100"
+                  activeComponent === "settings"
+                    ? "bg-primary-light text-primary"
+                    : "hover:bg-background-light"
                 }`}
-                onClick={() => setActiveComponent("settings")}
+                onClick={() => handleMenuClick("settings")}
               >
                 <FaCog className="mr-3" />
                 Settings
@@ -87,7 +100,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </li>
           </ul>
         </nav>
-        <main className="flex-1 p-8 bg-white m-6 rounded-lg shadow-lg">{children}</main>
+        <main className="flex-1 p-8 bg-background-alt m-6 rounded-lg shadow-lg">
+          <div className="bg-white p-6 rounded-lg shadow-md">{children}</div>
+        </main>
       </div>
     </div>
   );

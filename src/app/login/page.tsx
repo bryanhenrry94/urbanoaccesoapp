@@ -25,11 +25,13 @@ const LoginPage: React.FC = () => {
     password: "",
   });
 
+  /*
   useEffect(() => {
     if (status === "authenticated") {
       router.push("/admin");
     }
   }, [status, router]);
+  */
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -43,18 +45,18 @@ const LoginPage: React.FC = () => {
     e.preventDefault();
 
     try {
-      const signInResult = await signIn("credentials", {
+      const result = await signIn("credentials", {
         email: formData.email,
         password: formData.password,
-        redirect: false,
+        redirect: false
       });
 
-      if (signInResult?.error) {
-        console.error("Error signing in:", signInResult.error);
+      if (result?.error) {
+        console.error("Error signing in:", result.error);
         alert("Credenciales inválidas. Por favor, intente de nuevo.");
-      } else {
-        router.push("/admin");
       }
+
+      router.push("/admin");
     } catch (error) {
       console.error("Error during login process:", error);
       alert(
@@ -104,7 +106,7 @@ const LoginPage: React.FC = () => {
           <form className="mt-6 md:mt-8 space-y-4 md:space-y-6" onSubmit={handleSubmit}>
             <div className="rounded-md shadow-sm -space-y-px">
               <div>
-                <Label htmlFor="email" className="sr-only">
+                <Label htmlFor="email">
                   Usuario
                 </Label>
                 <Input
@@ -120,7 +122,7 @@ const LoginPage: React.FC = () => {
                 />
               </div>
               <div>
-                <Label htmlFor="password" className="sr-only">
+                <Label htmlFor="password">
                   Contraseña
                 </Label>
                 <Input

@@ -4,6 +4,8 @@ import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { sql } from "@vercel/postgres";
+import { getTenantByEmail } from "@/lib/db";
+import { getToken } from "next-auth/jwt"; // Importa getToken
 
 const authHandler = NextAuth({
   providers: [
@@ -135,27 +137,25 @@ const authHandler = NextAuth({
       }
     },
     async redirect({ url, baseUrl }) {
-      // Redirige a /dashboard después de un inicio de sesión exitoso
-      // tanto para credenciales como para Google
-      if (url.startsWith("/api/auth/callback") || url === "/api/auth/signin") {
-        return Promise.resolve("/dashboard");
-      }
-
-      // Asegúrate de redirigir correctamente en otros casos
-      return Promise.resolve(baseUrl);
+       // Use the default redirect behavior
+       return url.startsWith(baseUrl) ? url : baseUrl;
     },
     async session({ session, user, token }) {
-      if (token.sub && session.user) {
-        (session.user as any).id = token.sub;
+      if (session.user) {
+        session.user.email = token.email;
+        // Añadir el subdomain del tenant a la sesión
+        (session as any).tenantSubdomain = token.tenantSubdomain;
       }
       return session;
     },
     async jwt({ token, user, account, profile, isNewUser }) {
       if (user) {
-        token.id = user.id;
-      }
-      if (account) {
-        token.accessToken = account.access_token;
+        token.email = user.email;
+        // Buscar el tenant aquí
+        const tenant = await getTenantByEmail(user.email as string);
+        if (tenant) {
+          token.tenantSubdomain = tenant.subdomain;
+        }
       }
       return token;
     },

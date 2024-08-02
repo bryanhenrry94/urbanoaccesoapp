@@ -44,3 +44,29 @@ export async function getTenantBySubdomain(subdomain: string | null) {
     return null;
   }
 }
+
+// Add this function if it doesn't exist
+export async function getTenantByEmail(email: string) {
+  if (!email) {
+    return null;
+  }
+
+  try {
+    const result = await sql`
+      SELECT u.id, u.email, t.name, t.subdomain
+      FROM users u
+      JOIN tenants t ON u.tenant_id = t.id
+      WHERE u.email = ${email}
+      LIMIT 1
+    `;
+
+    if (result.rows.length === 0) {
+      return null;
+    }
+
+    return result.rows[0];
+  } catch (error) {
+    console.error('Error al obtener el tenant:', error);
+    return null;
+  }
+}
