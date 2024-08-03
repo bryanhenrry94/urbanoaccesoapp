@@ -10,6 +10,7 @@ import Image from "next/image";
 import { signIn, useSession } from "next-auth/react";
 import { FaKey, FaGoogle } from "react-icons/fa";
 import { useRouter } from "next/navigation";
+import { getTenantByEmail } from "@/lib/db";
 
 interface LoginForm {
   email: string;
@@ -87,6 +88,12 @@ const LoginPage: React.FC = () => {
     }
   };
 
+  const handleTenantByEmail = async (email: string) => {
+    console.log("email", email);
+    const tenant = await getTenantByEmail(email);
+    console.log(tenant);
+  };
+
   return (
     <div className="min-h-screen bg-background-alt flex items-center justify-center p-4">
       <div className="flex flex-col md:flex-row w-full max-w-6xl bg-background rounded-xl shadow-2xl overflow-hidden">
@@ -119,6 +126,7 @@ const LoginPage: React.FC = () => {
                   placeholder="Email"
                   value={formData.email}
                   onChange={handleChange}
+                  onBlur={(e) => handleTenantByEmail(e.target.value)}
                 />
               </div>
               <div>
