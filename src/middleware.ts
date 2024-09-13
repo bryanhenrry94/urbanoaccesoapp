@@ -1,47 +1,61 @@
-import { NextRequest, NextResponse } from "next/server";
-import { getToken } from "next-auth/jwt";
-import { getTenantBySubdomain } from "@/lib/db";
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
-const protectedPaths = ["/admin"];
-const allowedDomains = ["localhost:3000", "urbanoaccesoapp.vercel.app", "urbanoacceso.com"];
+export const config = {
+  matcher: ["/((?!api/|_next/|_static/|[\\w-]+\\.\\w+).*)"],
+};
 
 export async function middleware(req: NextRequest) {
   const url = req.nextUrl;
-  const hostname = req.headers.get("host") || "";
-  const subdomain = hostname.split(".")[0];
-  
-  // Check if it's an allowed domain
-  const isAllowedDomain = allowedDomains.some((domain) => hostname.includes(domain));
-  if (!isAllowedDomain) {
-    return new Response(null, { status: 404 });
+  let hostname = req.headers.get("host") || "";
+
+  // Remove port if it exists
+  hostname = hostname.split(":")[0];
+
+  // Define allowed domains (including main domain and localhost)
+  const allowedDomains = ["urbanoacceso.com", "localhost:3000", "localhost"];
+
+  // Check if the current hostname is in the list of allowed domains
+  const isMainDomain = allowedDomains.includes(hostname);
+
+  // Extract subdomain if not a main domain
+  const subdomain = isMainDomain ? null : hostname.split(".")[0];
+
+  console.log("Middleware: Hostname:", hostname);
+  console.log("Middleware: Subdomain:", subdomain);
+
+  // If it's a main domain, allow the request to proceed
+  if (isMainDomain) {
+    console.log("Middleware: Main domain detected, passing through");
+    return NextResponse.next();
   }
 
-  // Check if it's an allowed subdomain
-  const isAllowedSubdomain = await getTenantBySubdomain(subdomain);
-  if (!isAllowedSubdomain && subdomain !== "www" && !hostname.startsWith("localhost")) {
-    return new Response(null, { status: 404 });
-  }
+  // Handle subdomain logic
+  if (subdomain) {
+    try {
+      console.log("url.origin", url.origin);
+      // Use fetch to verify if the subdomain exists
+      const response = await fetch(
+        `${url.origin}/api/v1/tenant?subdomain=${subdomain}`
+      );
 
-  // Check if the path is under /admin
-  if (url.pathname.startsWith("/admin")) {
-    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-
-    // If not authenticated, redirect to login
-    if (!token) {
-      const protocol = req.headers.get("x-forwarded-proto") || url.protocol.replace(":", "");
-      const loginUrl = new URL(`/login`, `${protocol}://${hostname}`);
-      return NextResponse.redirect(loginUrl);
+      if (response.ok) {
+        console.log("Middleware: Valid subdomain detected, rewriting URL");
+        // Rewrite the URL to a dynamic route based on the subdomain
+        return NextResponse.rewrite(
+          new URL(`/${subdomain}${url.pathname}`, req.url)
+        );
+      }
+    } catch (error) {
+      console.error("Middleware: Error fetching tenant:", error);
     }
-
-    // If authenticated and it's a valid subdomain, rewrite the URL
-    if (isAllowedSubdomain) {
-      return NextResponse.rewrite(new URL(`/${subdomain}${url.pathname}`, req.url));
-    }
   }
 
-  return NextResponse.next();
+  console.log("Middleware: Invalid subdomain or domain, returning 404");
+  // If none of the above conditions are met, return a 404 response
+  const mainDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "localhost:3000";
+  const notFoundUrl = new URL(`/404`, `http://${mainDomain}`);
+
+  console.log("notFoundUrl", notFoundUrl.toString());
+  return NextResponse.redirect(notFoundUrl);
 }
-
-export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
-};

@@ -10,7 +10,7 @@ import Image from "next/image";
 import { signIn, useSession } from "next-auth/react";
 import { FaKey, FaGoogle } from "react-icons/fa";
 import { useRouter } from "next/navigation";
-import { getTenantByEmail } from "@/lib/db";
+import { useTenantByEmail } from "@/hooks/useTenants";
 
 interface LoginForm {
   email: string;
@@ -18,6 +18,7 @@ interface LoginForm {
 }
 
 const LoginPage: React.FC = () => {
+  const { tenant, loading, error, fetchTenantByEmail } = useTenantByEmail();
   const { data: session, status } = useSession();
   const router = useRouter();
 
@@ -25,14 +26,6 @@ const LoginPage: React.FC = () => {
     email: "",
     password: "",
   });
-
-  /*
-  useEffect(() => {
-    if (status === "authenticated") {
-      router.push("/admin");
-    }
-  }, [status, router]);
-  */
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -49,15 +42,20 @@ const LoginPage: React.FC = () => {
       const result = await signIn("credentials", {
         email: formData.email,
         password: formData.password,
-        redirect: false
+        redirect: false,
       });
 
       if (result?.error) {
         console.error("Error signing in:", result.error);
         alert("Credenciales inválidas. Por favor, intente de nuevo.");
+        return;
       }
 
-      router.push("/admin");
+      if (!result?.ok) {
+        throw new Error("Error en el inicio de sesión");
+      }
+
+      router.push("/auth/dashboard");
     } catch (error) {
       console.error("Error during login process:", error);
       alert(
@@ -89,9 +87,9 @@ const LoginPage: React.FC = () => {
   };
 
   const handleTenantByEmail = async (email: string) => {
-    console.log("email", email);
-    const tenant = await getTenantByEmail(email);
-    console.log(tenant);
+    if (!email) return;
+
+    await fetchTenantByEmail(email);
   };
 
   return (
@@ -109,13 +107,15 @@ const LoginPage: React.FC = () => {
             <h2 className="mt-4 md:mt-6 text-center text-2xl md:text-3xl font-extrabold text-text">
               Inicio de Sesión
             </h2>
+            {tenant && <p>Tenant: {tenant.subdomain}</p>}
           </div>
-          <form className="mt-6 md:mt-8 space-y-4 md:space-y-6" onSubmit={handleSubmit}>
+          <form
+            className="mt-6 md:mt-8 space-y-4 md:space-y-6"
+            onSubmit={handleSubmit}
+          >
             <div className="rounded-md shadow-sm -space-y-px">
               <div>
-                <Label htmlFor="email">
-                  Usuario
-                </Label>
+                <Label htmlFor="email">Usuario</Label>
                 <Input
                   id="email"
                   name="email"
@@ -130,9 +130,7 @@ const LoginPage: React.FC = () => {
                 />
               </div>
               <div>
-                <Label htmlFor="password">
-                  Contraseña
-                </Label>
+                <Label htmlFor="password">Contraseña</Label>
                 <Input
                   id="password"
                   name="password"
@@ -164,7 +162,9 @@ const LoginPage: React.FC = () => {
                 <div className="w-full border-t border-border"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-background text-text-light">O continúa con</span>
+                <span className="px-2 bg-background text-text-light">
+                  O continúa con
+                </span>
               </div>
             </div>
 

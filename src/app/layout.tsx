@@ -2,10 +2,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import SessionProvider from "./Provider";
-import { TenantProvider, Tenant } from "@/contexts/TenantContext";
-import { headers } from "next/headers";
-import { getTenantBySubdomain } from "@/lib/db";
-
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -18,17 +14,11 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const headersList = headers();
-  const subdomain = headersList.get("x-tenant-subdomain");
-  const tenant = (await getTenantBySubdomain(subdomain)) as Tenant | null;
-
   return (
     <html lang="en">
-      <TenantProvider value={{ tenant }}>
-        <SessionProvider>
-          <body className={inter.className}>{children}</body>
-        </SessionProvider>
-      </TenantProvider>
+      <SessionProvider>
+        <body className={inter.className}>{children}</body>
+      </SessionProvider>
     </html>
   );
 }

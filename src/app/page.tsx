@@ -1,10 +1,10 @@
 import React from "react";
-import HomePage from "@/app/home/page";
+import Login from "@/app/login/page";
 
 const page = () => {
   return (
-    <div>      
-      <HomePage />
+    <div>
+      <Login />
     </div>
   );
 };

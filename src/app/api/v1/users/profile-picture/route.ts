@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { writeFile } from 'fs/promises';
 import path from 'path';
-import { updateUserProfilePicture } from '@/lib/db'; 
+import { updateUserProfilePicture } from '@/db/users'; 
 
 export async function POST(request: Request) {
   const formData = await request.formData();

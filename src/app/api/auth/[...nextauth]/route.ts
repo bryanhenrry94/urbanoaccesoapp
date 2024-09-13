@@ -3,9 +3,9 @@ import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import { sql } from "@vercel/postgres";
-import { getTenantByEmail } from "@/lib/db";
-import { getToken } from "next-auth/jwt"; // Importa getToken
+import { getTenantByEmail } from "@/db/tenants";
+import { getUserByEmail, existsUser, createUser } from "@/db/users";
+import { assignUserRole } from "@/db/user_roles";
 
 const authHandler = NextAuth({
   providers: [
@@ -25,13 +25,7 @@ const authHandler = NextAuth({
         }
 
         try {
-          const result = await sql`
-            SELECT *
-            FROM users
-            WHERE email = ${credentials.email}
-          `;
-
-          const user = result.rows[0];
+          const user = await getUserByEmail(credentials.email);
 
           if (!user) {
             return null;
@@ -69,62 +63,23 @@ const authHandler = NextAuth({
       try {
         if (account?.provider === "google") {
           // Verificar si el usuario ya existe llamando a la API
-          const checkUserResponse = await fetch(
-            `/v1/users/check/?email=${user.email}`,
-            {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-
-          if (!checkUserResponse.ok) {
-            throw new Error("Error al verificar el usuario");
-          }
-
-          const { exists } = await checkUserResponse.json();
+          const exists = await existsUser(user.email as string);
 
           if (!exists) {
             // Generar un hash de contraseña temporal
             const tempPassword = Math.random().toString(36).slice(-8);
             const tempPasswordHash = await bcrypt.hash(tempPassword, 10);
 
-            // Si el usuario no existe, lo registramos llamando a la API
-            const registerResponse = await fetch(`/v1/users/register`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                email: user.email,
-                name: user.name,
-                password_hash: tempPasswordHash,
-                image: user.image,
-              }),
-            });
+            // Crear el usuario en la base de datos
+            const createdUser = await createUser(
+              user.email as string,
+              tempPasswordHash,
+              user.name as string,
+              user.image as string
+            );
 
-            if (!registerResponse.ok) {
-              throw new Error("Error al registrar el usuario");
-            }
-
-            const { createdUser } = await registerResponse.json();
-
-            // Asignar el rol 'user' por defecto
-            const assignRoleResponse = await fetch(`/v1/user_roles/assign`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                user_id: createdUser.id,
-                role_id: 2, // 1 = admin, 2 = user
-              }),
-            });
-
-            if (!assignRoleResponse.ok) {
-              throw new Error("Error al asignar el rol al usuario");
-            }
+            // 1 = admin, 2 = user
+            await assignUserRole(createdUser.id, 1);
 
             // TODO: Enviar un correo al usuario con instrucciones para cambiar su contraseña temporal
           }
@@ -137,8 +92,8 @@ const authHandler = NextAuth({
       }
     },
     async redirect({ url, baseUrl }) {
-       // Use the default redirect behavior
-       return url.startsWith(baseUrl) ? url : baseUrl;
+      // Use the default redirect behavior
+      return url.startsWith(baseUrl) ? url : baseUrl;
     },
     async session({ session, user, token }) {
       if (session.user) {
